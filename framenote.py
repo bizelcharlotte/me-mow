@@ -1,9 +1,18 @@
 import ttkbootstrap as ttk
+from pathlib import Path
+from data import DateStore,Date
+from ttkbootstrap.dialogs import Messagebox
+
 
 
 class FrameNote(ttk.Frame):
     def __init__(self,parent):
         super().__init__(parent)
+        self.dates: DateStore = DateStore(Path('data.db'))
+        self.dates.create_table()
+        for date in self.dates.list_dates():
+            self.tree.insert('',ttk.END,values=(date.iid,date.id,date.date,date.note))
+
             
         frame_left = ttk.Frame(self, borderwidth=2)
         frame_left.pack(side=ttk.LEFT, fill=ttk.Y, expand=ttk.YES)
@@ -47,7 +56,7 @@ class FrameNote(ttk.Frame):
 
 
         
-        frame_right = ttk.Frame(self, borderwidth=20, relief=ttk.SUNKEN)
+        frame_right = ttk.Frame(self, borderwidth=20)
         frame_right.pack(side=ttk.LEFT, fill=ttk.X, expand=ttk.YES)
 
         self.tree = ttk.Treeview(frame_right,columns=('iid','id','date','note'),show= ttk.HEADINGS,
@@ -75,9 +84,164 @@ class FrameNote(ttk.Frame):
         self.tree.bind("<<TreeviewSelect>>", self.__select)
 
 
-    
-    def make_center_frame():
-        pass
+    def __create(self):
 
-    def make_right_frame():
-        pass
+        self.__sv_date.set('')
+        self.__sv_note.set('')
+
+    def __save(self):
+
+        date= Date(id =-1,
+                       date = self.__sv_date.get(),
+                       note = self.__sv_note.get(),
+                       
+                       )
+       
+        try : 
+            date = self.dates.insert_date(date)
+            self.tree.insert("","end",values=(date.iid,date.id,date.date,date.note))
+        except Exception as e:
+
+            self.showerror( message=str(e))
+       
+       
+    def __update(self):
+    
+        selection = self.tree.selection()
+        item = self.tree.item(selection,option='values')
+        id = int(item[1])
+
+        try:
+        
+            old_date = self.dates.get_date(id)
+            new_date=Date(id =old_date.id ,
+                                date = self.__sv_date.get(),
+                                note = self.__sv_note.get(),
+
+                                 )
+            
+            self.dates.update_date(old_date,new_date)
+            self.tree.delete(selection)
+            self.tree.insert("","end",values=(new_date.iid,new_date.id,new_date.date,new_date.note))
+            
+        except Exception as e:
+        
+            self.showerror( message=str(e))
+    def __delete(self):
+
+        selection = self.tree.selection()
+        item = self.tree.item(selection,option='values')
+        id = int(item[1])
+        date = self.dates.get_date(id)
+        try: 
+            
+            self.dates.delete_date(date)
+            self.tree.delete(selection)
+
+        except Exception as e:
+            
+            self.showerror( message=str(e))
+
+    def __select(self,event):
+
+        try:
+            selection = self.tree.selection()
+            item = self.tree.item(selection,option='values')
+            id = int(item[1])
+        except IndexError:
+            return
+        
+        try:
+            date = self.dates.get_date(id)
+            self.__show_date(date)
+        except Exception as e:
+            
+            self.showerror( message=str(e))
+        except IndexError:
+            self.__show_date(date.empty())
+
+    def __show_date(self,date):
+
+        self.__sv_date.set(date.date)
+        self.__sv_note.set(date.note)
+
+    def __create(self):
+
+        self.__sv_date.set('')
+        self.__sv_note.set('')
+
+    def __save(self):
+
+        date= Date(id =-1,
+                       date = self.__sv_date.get(),
+                       note = self.__sv_note.get(),
+                       
+                       )
+       
+        try : 
+            date = self.dates.insert_date(date)
+            self.tree.insert("","end",values=(date.iid,date.id,date.date,date.note))
+        except Exception as e:
+
+            self.showerror( message=str(e))
+       
+       
+    def __update(self):
+    
+        selection = self.tree.selection()
+        item = self.tree.item(selection,option='values')
+        id = int(item[1])
+
+        try:
+        
+            old_date = self.dates.get_date(id)
+            new_date=Date(id =old_date.id ,
+                                date = self.__sv_date.get(),
+                                note = self.__sv_note.get(),
+
+                                 )
+            
+            self.dates.update_date(old_date,new_date)
+            self.tree.delete(selection)
+            self.tree.insert("","end",values=(new_date.iid,new_date.id,new_date.date,new_date.note))
+            
+        except Exception as e:
+        
+            self.showerror( message=str(e))
+    def __delete(self):
+
+        selection = self.tree.selection()
+        item = self.tree.item(selection,option='values')
+        id = int(item[1])
+        date = self.dates.get_date(id)
+        try: 
+            
+            self.dates.delete_date(date)
+            self.tree.delete(selection)
+
+        except Exception as e:
+            
+            self.showerror( message=str(e))
+
+    def __select(self,event):
+
+        try:
+            selection = self.tree.selection()
+            item = self.tree.item(selection,option='values')
+            id = int(item[1])
+        except IndexError:
+            return
+        
+        try:
+            date = self.dates.get_date(id)
+            self.__show_date(date)
+        except Exception as e:
+            
+            self.showerror( message=str(e))
+        except IndexError:
+            self.__show_date(date.empty())
+
+    def __show_date(self,date):
+
+        self.__sv_date.set(date.date)
+        self.__sv_note.set(date.note)

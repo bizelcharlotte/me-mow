@@ -2,6 +2,9 @@ import ttkbootstrap as ttk
 from framenote import FrameNote
 from framecal import FrameCal
 from framepoid import FramePoid
+
+
+
 class App(ttk.Window):
     def __init__(self):
         super().__init__(title="Me-Mow",themename="superhero")

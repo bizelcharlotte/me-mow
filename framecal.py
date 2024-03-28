@@ -21,8 +21,3 @@ class FrameCal(ttk.Frame):
         btn_quit = ttk.Button(frame_left, text='quit', bootstyle='secondary')
         btn_quit.pack(side=ttk.TOP,fill=ttk.X, padx=10, pady=10)
     
-        def make_center_frame():
-            pass
-
-        def make_right_frame():
-            pass

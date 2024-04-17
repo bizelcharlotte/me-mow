@@ -4,7 +4,6 @@ from data import DateStore, Date
 from ttkbootstrap.dialogs import Messagebox
 import matplotlib.pyplot as plt
 
-
 class FramePoid(ttk.Frame):
     def __init__(self, parent):
 

@@ -14,16 +14,15 @@ class App(ttk.Window):
         self.frame_up.pack(side=ttk.TOP, fill=ttk.Y, expand=ttk.YES)
 
         image = Image.open("pitichat.png")
-        image = image.resize((100, 100))  # Redimensionner l'image si nécessaire
+        image = image.resize((100, 100))
         photo = ImageTk.PhotoImage(image)
 
         self.label_image = ttk.Label(self.frame_up, image=photo)
-        self.label_image.image = photo  # Gardez une référence à l'objet PhotoImage pour éviter la collecte par le garbage collector
+        self.label_image.image = photo
         self.label_image.pack(side=ttk.LEFT, padx=10, pady=10)
 
         label = ttk.Label(self.frame_up, text="Bienvenue sur Me-Mow")
         label.pack(side=ttk.LEFT, fill=ttk.X, expand=ttk.YES, padx=10, pady=10)
-
 
         self.book = ttk.Notebook(self)
         self.book.pack()

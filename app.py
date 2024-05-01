@@ -2,7 +2,7 @@ import ttkbootstrap as ttk
 
 from PIL import ImageTk, Image
 from framenote import FrameNote
-from framecal import FrameCal
+from framecal import AgendaApp
 from framepoid import FramePoids
 
 
@@ -13,7 +13,7 @@ class App(ttk.Window):
         self.frame_up = ttk.Frame(self, borderwidth=2)
         self.frame_up.pack(side=ttk.TOP, fill=ttk.Y, expand=ttk.YES)
 
-        image = Image.open("pitichat.png")
+        image = Image.open("pitichat-modified-removebg-preview.png")
         image = image.resize((100, 100))
         photo = ImageTk.PhotoImage(image)
 
@@ -26,11 +26,12 @@ class App(ttk.Window):
 
         self.book = ttk.Notebook(self)
         self.book.pack()
+
         self.framenote = FrameNote(self.book)
         self.book.add(self.framenote, text="Notes")
 
-        self.framecal = FrameCal(self.book)
-        self.book.add(self.framecal, text="calendrier")
+        self.framecal = AgendaApp()
+        self.book.add(self.framecal, text="Calendrier")
 
         self.framepoid = FramePoids(self.book)
         self.book.add(self.framepoid, text="poids et taille")

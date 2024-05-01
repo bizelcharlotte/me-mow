@@ -8,7 +8,7 @@ class AgendaApp(tk.Frame):
 
         aff_frame = ttk.Frame(self)
         aff_frame.pack(side="top", fill="both", expand=True)
-        afficher_button = ttk.Button(aff_frame, text="Modifier")
+        afficher_button = ttk.Button(aff_frame, text="Afficher le calendrier")
         afficher_button.pack(side="left", padx=10, pady=5)
 
     def butt_afficher(self):

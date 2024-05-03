@@ -24,7 +24,7 @@ class AgendaApp(tk.Tk):
         self.calendar_frame = ttk.Frame(self)
         self.calendar_frame.pack(side="left", fill="both", expand=True)
 
-        # Set the locale to French
+        # Set en fancais
         locale.setlocale(locale.LC_TIME, "fr_FR.utf8")
 
         self.calendar = Calendar(self.calendar_frame, selectmode="day", date_pattern="dd/MM/yyyy",locale="fr_FR")
@@ -62,6 +62,7 @@ class AgendaApp(tk.Tk):
             json.dump(self.tasks, f)
 
     def add_task(self):
+        # Ajouter une nouvelle tâche
         selected_date = self.calendar.get_date()
         new_task = sd.askstring("Ajouter une tâche", "Entrez le nom de la nouvelle tâche:")
         if new_task:
@@ -73,6 +74,7 @@ class AgendaApp(tk.Tk):
             self.show_tasks()
 
     def delete_task(self):
+        # Supprimer une tâche
         selected_date = self.calendar.get_date()
         selected_index = self.tasks_listbox.curselection()
         if selected_index:
@@ -83,6 +85,7 @@ class AgendaApp(tk.Tk):
             self.show_tasks()
 
     def modify_task(self):
+        # Modifier une tâche
         selected_date = self.calendar.get_date()
         selected_index = self.tasks_listbox.curselection()
         if selected_index:

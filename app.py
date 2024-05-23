@@ -1,15 +1,19 @@
 import ttkbootstrap as ttk
-
 from PIL import ImageTk, Image
 from framenote import FrameNote
 from framecal import AgendaApp
 from framepoid import FramePoids
 
-
 class App(ttk.Window):
+    """
+    Initialize the Me-Mow application with a dark theme.
+    This function sets up the main frame and widgets for the application, including an image, labels, and a notebook with different tabs for notes, calendar, and weight/height.
+    """
     def __init__(self):
+        """
+        Initialize the GUI for the Me-Mow application.
+        """
         super().__init__(title="Me-Mow", themename="darkly")
-
         self.frame_up = ttk.Frame(self, borderwidth=2)
         self.frame_up.pack(side=ttk.TOP, fill=ttk.Y, expand=ttk.YES)
 

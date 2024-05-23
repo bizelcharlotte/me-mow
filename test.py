@@ -8,6 +8,9 @@ import locale
 
 class AgendaApp(tk.Tk):
     def __init__(self):
+        """
+        Initialize the Agenda class with tasks loaded from a JSON file, a calendar in French locale, and buttons for adding, deleting, and modifying tasks.
+        """
         super().__init__()
 
         self.title("Agenda")
@@ -49,20 +52,28 @@ class AgendaApp(tk.Tk):
 
 
     def show_tasks(self, event=None):
+        """
+        A function to display tasks for a selected date.
+        """
         selected_date = self.calendar.get_date()
-        # Afficher les tâches pour la date sélectionnée
+
         self.tasks_listbox.delete(0, tk.END)
         tasks_for_date = self.tasks.get(selected_date, [])
         for task in tasks_for_date:
             self.tasks_listbox.insert(tk.END, task)
 
     def save_tasks(self):
-        # Enregistrer les tâches dans le fichier JSON
+        """
+        save task in file JSON
+        """
+
         with open(self.tasks_file, "w") as f:
             json.dump(self.tasks, f)
 
     def add_task(self):
-        # Ajouter une nouvelle tâche
+        """
+        add a new task
+        """
         selected_date = self.calendar.get_date()
         new_task = sd.askstring("Ajouter une tâche", "Entrez le nom de la nouvelle tâche:")
         if new_task:
@@ -74,7 +85,9 @@ class AgendaApp(tk.Tk):
             self.show_tasks()
 
     def delete_task(self):
-        # Supprimer une tâche
+        """
+      delete a task
+        """
         selected_date = self.calendar.get_date()
         selected_index = self.tasks_listbox.curselection()
         if selected_index:
@@ -85,7 +98,9 @@ class AgendaApp(tk.Tk):
             self.show_tasks()
 
     def modify_task(self):
-        # Modifier une tâche
+        """
+        Modifier une tâche
+        """
         selected_date = self.calendar.get_date()
         selected_index = self.tasks_listbox.curselection()
         if selected_index:

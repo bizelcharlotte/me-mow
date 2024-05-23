@@ -1,14 +1,14 @@
 import ttkbootstrap as ttk
-
 import matplotlib.pyplot as plt
 from pathlib import Path
 from tpdata import DateStore, Date
 from ttkbootstrap.dialogs import Messagebox
 
-
 class FramePoids(ttk.Frame):
     def __init__(self, parent):
-
+        """
+        Initialize the class with a parent widget.
+        """
         super().__init__(parent)
         self.dates: DateStore = DateStore(Path('tpdata.db'))
         self.__make_frame_left()
@@ -21,9 +21,21 @@ class FramePoids(ttk.Frame):
 
     @staticmethod
     def showerror(message: str):
+        """
+        A static method to display an error message using Messagebox.
+
+        Parameters:
+            message (str): The error message to be displayed.
+
+        Returns:
+            None
+        """
         Messagebox.show_error(message, title="error")
 
     def __make_frame_left(self):
+        """
+        Function to create and pack buttons in the left frame of the GUI.
+        """
         frame_left = ttk.Frame(self, borderwidth=2)
         frame_left.pack(side=ttk.LEFT, fill=ttk.Y, expand=ttk.YES)
 
@@ -39,7 +51,13 @@ class FramePoids(ttk.Frame):
         btn_del = ttk.Button(frame_left, text='delete', style='secondary', command=self.delete)
         btn_del.pack(side=ttk.TOP, fill=ttk.X, padx=10, pady=10)
 
+        btn_quit = ttk.Button(frame_left, text='quiter application', style='secondary', command=self.quit)
+        btn_quit.pack(side=ttk.TOP, fill=ttk.X, padx=10, pady=10)
+
     def __make_frame_center(self):
+        """
+        Function to create a frame at the center of the widget with various labels and Entry widgets for date, taille, and poids data input.
+        """
         frame_center = ttk.Frame(self, borderwidth=30)
         frame_center.pack(side=ttk.LEFT, fill=ttk.X, expand=ttk.NO)
 
@@ -65,22 +83,22 @@ class FramePoids(ttk.Frame):
         poids_label.grid(row=2, column=0)
 
     def __make_frame_right(self):
+        """
+        Generates the right frame for the GUI, containing a Treeview widget to display data.
+        """
         frame_right = ttk.Frame(self, borderwidth=20)
         frame_right.pack(side=ttk.LEFT, fill=ttk.BOTH, expand=ttk.YES)
 
         self.tree = ttk.Treeview(frame_right, columns=('iid', 'id', 'date', 'taille', 'poids'), show=ttk.HEADINGS,
                                  selectmode=ttk.BROWSE,
-                                 displaycolumns=('iid', 'id', 'date', 'taille', 'poids'))
+                                 displaycolumns=('date', 'taille', 'poids'))
 
         self.tree.pack(side=ttk.LEFT, fill=ttk.BOTH, expand=ttk.YES)
 
-        self.tree.column('#0', width=0, stretch=ttk.NO)
-        self.tree.column('id', width=50, stretch=ttk.YES)
-        self.tree.column('date', width=100, stretch=ttk.YES)
-        self.tree.column('taille', width=100, stretch=ttk.YES)
-        self.tree.column('poids', width=100, stretch=ttk.YES)
+        self.tree.column('date', width=100, stretch=ttk.YES,anchor=ttk.CENTER)
+        self.tree.column('taille', width=100, stretch=ttk.YES,anchor=ttk.CENTER)
+        self.tree.column('poids', width=100, stretch=ttk.YES,anchor=ttk.CENTER)
 
-        self.tree.heading('id', text='id')
         self.tree.heading('date', text='date')
         self.tree.heading('taille', text='taille')
         self.tree.heading('poids', text='poids')
@@ -94,6 +112,9 @@ class FramePoids(ttk.Frame):
         self.tree.bind("<<TreeviewSelect>>", self.select)
 
     def __make_frame_bottom(self):
+        """
+        Creates and configures the bottom frame of the UI with two buttons for different graphs.
+        """
         frame_bottom = ttk.Frame(self, borderwidth=2)
         frame_bottom.pack(side=ttk.BOTTOM, fill=ttk.X, expand=ttk.YES)
 
@@ -106,6 +127,9 @@ class FramePoids(ttk.Frame):
         btn_graph2.pack(side=ttk.LEFT, fill=ttk.X, padx=10, pady=10)
 
     def size_graph(self):
+        """
+        Generate a graph showing the relationship between dates and sizes of the items in the tree.
+        """
         dates = []
         sizes = []
 
@@ -123,6 +147,9 @@ class FramePoids(ttk.Frame):
         plt.show()
 
     def weight_graph(self):
+        """
+        Generate a weight graph based on the data stored in the tree.
+        """
         dates = []
         weights = []
 
@@ -140,13 +167,19 @@ class FramePoids(ttk.Frame):
         plt.show()
 
     def create(self):
-
+        """
+        Method to create something.
+        """
         self.__sv_date.set('')
         self.__sv_taille.set('')
         self.__sv_poids.set('')
 
     def save(self):
-
+        """
+        Save the data by creating a new Date object with the provided attributes and inserting it into the database.
+        If successful, update the tree view with the new date information.
+        If an exception occurs during the process, display the error message.
+        """
         date = Date(id_=-1,
                     date=self.__sv_date.get(),
                     poids=self.__sv_taille.get(),
@@ -161,7 +194,15 @@ class FramePoids(ttk.Frame):
             self.showerror(message=str(e))
 
     def update(self):
+        """
+        Update the selected item in the tree view with new date information.
 
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         selection = self.tree.selection()
         item = self.tree.item(selection, option='values')
         id_ = int(item[1])
@@ -185,7 +226,9 @@ class FramePoids(ttk.Frame):
             self.showerror(message=str(e))
 
     def delete(self):
-
+        """
+        Delete the selected item from the treeview, including its associated date entry.
+        """
         selection = self.tree.selection()
         item = self.tree.item(selection, option='values')
         id_ = int(item[1])
@@ -200,7 +243,12 @@ class FramePoids(ttk.Frame):
             self.showerror(message=str(e))
 
     def select(self, event):
+        """
+        Handle the selection of an item in the treeview.
 
+        :param event: The event that triggered the selection.
+        :return: None
+        """
         try:
             selection = self.tree.selection()
             item = self.tree.item(selection, option='values')
@@ -218,7 +266,12 @@ class FramePoids(ttk.Frame):
             self.show_date(Date.empty())
 
     def show_date(self, date):
+        """
+        Set the provided date attributes on the corresponding internal variables.
 
+        :param date: Date object containing date, taille, and poids attributes.
+        :return: None
+        """
         self.__sv_date.set(date.date)
         self.__sv_taille.set(date.taille)
         self.__sv_poids.set(date.poids)

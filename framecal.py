@@ -4,7 +4,7 @@ import subprocess
 
 
 class AgendaApp(tk.Frame):
-    def __init__(self, master=None):
+    def __init__(self,):
         """
         Constructor for the class, initializes the master widget.
 
@@ -14,9 +14,9 @@ class AgendaApp(tk.Frame):
         Returns:
             None
         """
-        super().__init__(master)
+        super().__init__()
 
-        self.master = master
+
 
         aff_frame = ttk.Frame(self)
         aff_frame.pack(side="top", fill="both", expand=True)
